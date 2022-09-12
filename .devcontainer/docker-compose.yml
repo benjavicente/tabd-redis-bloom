@@ -1,0 +1,30 @@
+version: "3.8"
+
+networks:
+  app:
+
+volumes:
+  redis-data:
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        VARIANT: "3.10"
+        NODE_VERSION: "lts/*"
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    networks:
+      - app
+
+  redis:
+    image: redislabs/rebloom
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    networks:
+      - app
